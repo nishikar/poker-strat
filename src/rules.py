@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 bet_val = 1.00 #1$
 
 #payout table
@@ -62,7 +61,7 @@ def get_suits(hand):
 def get_ranks_frequency(ranks):
     frequency = [0,0,0,0,0,0,0,0,0,0,0,0,0]
     
-    for i in xrange(len(ranks)):
+    for i in range(len(ranks)):
         frequency[ranks[i]-1] += 1
     
     return frequency
