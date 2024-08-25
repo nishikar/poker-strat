@@ -13,6 +13,7 @@ from pygame.locals import *
 from rules import *
 from utils import factorial, combination
 
+
 color = [1,2,3,4]
 value = [1,2,3,4,5,6,7,8,9,10,11,12,13]
 card = [] #describes all 52 cards in a deck in the form of < list of a (number, color) tuple >
@@ -72,10 +73,10 @@ def init_hand():
     global user_holds
     global index
     
-    del deck[:]
-    del hand[:]
-    del all_possible_holds[:]
-    del user_holds[:]
+    deck.clear()
+    hand.clear()
+    all_possible_holds.clear()
+    user_holds.clear()
     index = 0
     
     #current deck
@@ -108,10 +109,10 @@ def evaluate():
     global match_cnt
     global no_of_deals
 
-    print "evaluating...."
-    print datetime.datetime.now().time()
+    print("evaluating....")
+    print(datetime.datetime.now().time())
     
-    del all_possible_holds[:]
+    all_possible_holds.clear()
     index = 0       
         
     # all 32 possible strategies (hold possibilities) for a dealt hand ( need to calculate expected value for each of these )   
@@ -139,16 +140,15 @@ def evaluate():
             max_val = expected_value[i]
             index = i   
 
-    print datetime.datetime.now().time()
-    print "hold: "
+    print(datetime.datetime.now().time())
+    print("hold: ", end="")
     for item in all_possible_holds[index]:      
-        print print_num[item[0]],
-        print print_color[item[1]],
-        print ' ',
-    print ''    
+        print(print_num[item[0]], end=" ")
+        print(print_color[item[1]], end=" ")
+    print()    
     
-    print "with expected value: ",
-    print max_val   
+    print("with expected value: ", end="")
+    print(max_val)   
     
     user_match = False
     calc_match = False
@@ -166,17 +166,17 @@ def evaluate():
             calc_match = False
             break
     if (user_match and calc_match) or (len(all_possible_holds[index]) == 0 and len(user_holds) == 0):
-        print "Correct"
+        print("Correct")
         match_flag = True
         match_cnt += 1
                 
     else:
-        print "Wrong" 
+        print("Wrong") 
         match_flag = False      
     
-    print match_cnt
-    print no_of_deals   
-    print float(match_cnt)/float(no_of_deals) * 100
+    print(match_cnt)
+    print(no_of_deals)   
+    print(float(match_cnt)/float(no_of_deals) * 100)
     
 
 def user_input(coordinate):
@@ -249,26 +249,26 @@ def display():
     pygame.draw.rect(screen,(60,60,60),DEAL_BTN)
     pygame.draw.rect(screen,(0,0,255),DEAL_BTN,2)
     
-    btn_font_surface_e = btn_font.render("EVAL",2,(255,255,0))
+    btn_font_surface_e = btn_font.render("EVAL",True,(255,255,0))
     screen.blit(btn_font_surface_e, (179,168))
-    btn_font_surface_d = btn_font.render("DEAL",2,(255,255,0))
+    btn_font_surface_d = btn_font.render("DEAL",True,(255,255,0))
     screen.blit(btn_font_surface_d, (289,168))
     
     #key info
-    info_font_surface = info_font.render("[Click on card to hold] [Space to deal new hand] [Enter to evaluate hold]",2,(0,0,255))
+    info_font_surface = info_font.render("[Click on card to hold] [Space to deal new hand] [Enter to evaluate hold]",True,(0,0,255))
     screen.blit(info_font_surface, (50,470))
     
     #paytable info
-    pay_font_surface_royal = pay_font.render( "Royal Flush : "+str(ROYAL), 3, (255, 255, 0) )
-    pay_font_surface_stFlush = pay_font.render( "Straight Flush : "+str(ST_FLUSH), 3, (255, 255, 0) )
-    pay_font_surface_four = pay_font.render( "Four of a Kind : "+str(FOUR_KIND), 3, (255, 255, 0) )
-    pay_font_surface_fh = pay_font.render( "Full House : "+str(FULL_HOUSE), 3, (255, 255, 0) )
-    pay_font_surface_flush = pay_font.render( "Flush : "+str(FLUSH), 3, (255, 255, 0) )
-    pay_font_surface_st = pay_font.render( "Straight : "+str(STRAIGHT), 3, (255, 255, 0) )
-    pay_font_surface_three = pay_font.render( "Three of a Kind : "+str(THREE_KIND), 3, (255, 255, 0) )
-    pay_font_surface_two = pay_font.render( "Two Pair: "+str(TWO_PAIR), 3, (255, 255, 0) )
-    pay_font_surface_jb = pay_font.render( "Jacks or Better : "+str(JACK_BETTER), 3, (255, 255, 0) )
-    pay_font_surface_bet = pay_font.render( "Bet : $"+str(bet_val), 3, (0,0,0) )
+    pay_font_surface_royal = pay_font.render( "Royal Flush : "+str(ROYAL), True, (255, 255, 0) )
+    pay_font_surface_stFlush = pay_font.render( "Straight Flush : "+str(ST_FLUSH), True, (255, 255, 0) )
+    pay_font_surface_four = pay_font.render( "Four of a Kind : "+str(FOUR_KIND), True, (255, 255, 0) )
+    pay_font_surface_fh = pay_font.render( "Full House : "+str(FULL_HOUSE), True, (255, 255, 0) )
+    pay_font_surface_flush = pay_font.render( "Flush : "+str(FLUSH), True, (255, 255, 0) )
+    pay_font_surface_st = pay_font.render( "Straight : "+str(STRAIGHT), True, (255, 255, 0) )
+    pay_font_surface_three = pay_font.render( "Three of a Kind : "+str(THREE_KIND), True, (255, 255, 0) )
+    pay_font_surface_two = pay_font.render( "Two Pair: "+str(TWO_PAIR), True, (255, 255, 0) )
+    pay_font_surface_jb = pay_font.render( "Jacks or Better : "+str(JACK_BETTER), True, (255, 255, 0) )
+    pay_font_surface_bet = pay_font.render( "Bet : $"+str(bet_val), True, (0,0,0) )
     
     screen.blit(pay_font_surface_royal, (520,50))
     screen.blit(pay_font_surface_stFlush, (520,80))
@@ -281,12 +281,12 @@ def display():
     screen.blit(pay_font_surface_jb, (520,290))
     screen.blit(pay_font_surface_bet, (520,380))
     
-    stat_font_surface_correct = stat_font.render( "correct: "+str(match_cnt), 2, (0,0,0) )
-    stat_font_surface_total =   stat_font.render( "total hands: "+str(no_of_deals), 2, (0,0,0) )
+    stat_font_surface_correct = stat_font.render( "correct: "+str(match_cnt), True, (0,0,0) )
+    stat_font_surface_total =   stat_font.render( "total hands: "+str(no_of_deals), True, (0,0,0) )
     if no_of_deals > 0:
-        stat_font_surface_acc = stat_font.render( "accuracy: "+str(round(float(match_cnt)/float(no_of_deals) * 100,2))+"%", 2, (0,0,0) )
+        stat_font_surface_acc = stat_font.render( "accuracy: "+str(round(float(match_cnt)/float(no_of_deals) * 100,2))+"%", True, (0,0,0) )
     else:
-        stat_font_surface_acc = stat_font.render( "accuracy: ", 2, (0,0,0) )    
+        stat_font_surface_acc = stat_font.render( "accuracy: ", True, (0,0,0) )    
     
     screen.blit(stat_font_surface_correct, (50,360))
     screen.blit(stat_font_surface_total, (50,390))
@@ -322,12 +322,11 @@ if __name__ == "__main__":
     init_cards()
     init_hand()
 
-    print "dealt hand: "
+    print("dealt hand: ", end="")
     for i in range(0, len(hand)):
-        print print_num[hand[i][0]],
-        print print_color[hand[i][1]],
-        print ' ',
-    print ''
+        print(print_num[hand[i][0]], end=" ")
+        print(print_color[hand[i][1]], end=" ")
+    print()
 
     os.environ['SDL_VIDEO_CENTERED'] = '1'             
     pygame.init()
@@ -367,4 +366,3 @@ if __name__ == "__main__":
     while True:
         input(pygame.event.get())    
         display()
-
