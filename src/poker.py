@@ -3,6 +3,7 @@
 import itertools
 import random
 import datetime
+import numpy as np
 
 import sys
 import os
@@ -112,33 +113,28 @@ def evaluate():
     print("evaluating....")
     print(datetime.datetime.now().time())
     
-    all_possible_holds.clear()
-    index = 0       
+    all_possible_holds = [combo for i in range(len(hand) + 1) for combo in itertools.combinations(hand, i)]
+    
+    expected_values = []
+    for hold in all_possible_holds:
+        draws_needed = 5 - len(hold)
+        remaining_deck = list(set(card) - set(hold))
         
-    # all 32 possible strategies (hold possibilities) for a dealt hand ( need to calculate expected value for each of these )   
-    for i in range(0,len(hand)+1):
-        for subset in itertools.combinations(hand,i):
-                all_possible_holds.append(subset)   
-
-    # build all possible trial hands by brute force and calculate expected value for all possible hold strategies
-    expected_value = [] 
-    for item in all_possible_holds:     
-        number_of_draws = 5-len(item)
-        no_all_possible_draws = combination(len(deck),number_of_draws)      
-        payout_running_sum = 0
-        sets = itertools.combinations(deck,number_of_draws)
-        for subset in sets:              
-            trial_hand = item + subset
-            payout_running_sum = payout_running_sum + payout(trial_hand)                            
-        expected_value.append(payout_running_sum/no_all_possible_draws)     
+        # Monte Carlo simulation
+        num_simulations = 10000  # Adjust this number for speed/accuracy trade-off
+        payouts = np.zeros(num_simulations)
         
+        for i in range(num_simulations):
+            draw = random.sample(remaining_deck, draws_needed)
+            trial_hand = list(hold) + draw
+            payouts[i] = payout(trial_hand)
+        
+        expected_value = np.mean(payouts)
+        expected_values.append(expected_value)
 
-    #find hold strategy with maximum expected value
-    max_val = 0.0
-    for i in range(0,len(expected_value)):
-        if expected_value[i] > max_val:
-            max_val = expected_value[i]
-            index = i   
+    # Find hold strategy with maximum expected value
+    index = np.argmax(expected_values)
+    max_val = expected_values[index]
 
     print(datetime.datetime.now().time())
     print("hold: ", end="")
